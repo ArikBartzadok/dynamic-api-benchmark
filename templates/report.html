@@ -30,7 +30,7 @@
 
       body {
         background: #dfdfdf;
-        color: #000000;
+        color: #ffffff;
         font-family: 'Roboto Mono', monospace, sans-serif !important;
       }
 
@@ -48,6 +48,10 @@
         margin-bottom: 20px;
         text-align: center;
       }
+
+      .font-black {
+				color: #000;
+			}
 
       .buttons {
         width: 100%;
@@ -94,7 +98,7 @@
       }
       .stats-details {
         font-family: 'Roboto Mono', monospace, sans-serif;
-        font-size: 30px;
+        font-size: 15px;
         float: left;
         width: 36%;
         padding: 2%;
@@ -123,10 +127,10 @@
     var data={{ data }};
     // --></script>
     <div id="report">
-      <div id="report-details"><h1>Resultados do benchmark</h1></div>
+      <div id="report-details" class="font-black"><h1>Resultados do benchmark</h1></div>
       <div id="charts"></div>
     </div>
-    <div style="text-align: center">
+    <div style="text-align: center" class="font-black">
     Gerado por <a href="https://github.com/ArikBartzadok/dynamic-api-benchmark" target="_blank" style="color: #1baf00;">dynamic-api-benchmark</a><br /><br />
     <iframe src="https://ghbtns.com/github-btn.html?user=ArikBartzadok&repo=dynamic-api-benchmark&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
     </div>
