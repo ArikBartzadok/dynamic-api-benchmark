@@ -1,0 +1,40 @@
+{
+  "name": "dynamic-api-benchmark",
+  "version": "1.0.0",
+  "description": "Pacote para testes dinâmicos de APIs",
+  "author": "Diogo Ferreira dos Santos",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ArikBartzadok/dynamic-api-benchmark.git"
+  },
+  "scripts": {
+    "test": "jshint lib test templates index.js && node test/index"
+  },
+  "main": "index.js",
+  "devDependencies": {
+    "http-test-servers": "1.0.0",
+    "injectr": "^0.5.1",
+    "jshint": "^2.9.2",
+    "mocha": "5.0.4",
+    "should": "13.2.1"
+  },
+  "engines": {
+    "node": ">= 4",
+    "npm": ">=1.2.x"
+  },
+  "keywords": [
+    "benchmark",
+    "api",
+    "performance",
+    "test",
+    "load balancer",
+    "deployment",
+    "continuous delivery"
+  ],
+  "dependencies": {
+    "give-me": "0.1.0",
+    "superagent": "3.8.2",
+    "underscore": "1.8.3"
+  }
+}
