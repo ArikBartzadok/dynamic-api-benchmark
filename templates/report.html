@@ -176,7 +176,7 @@
       var templates = {
         reportDetails: function(info){
           var formattedDate = formatDate(info.date);
-          return 'Benchmarked ' + info.apiName + ' on ' + formattedDate;
+          return 'Benchmarked da API ' + info.apiName + ' realizado em ' + formattedDate;
         },
         route: function(routeData, i){
           var errorsCount = 0,
@@ -194,26 +194,26 @@
             errorsDesc = errorsDesc.substr(0, errorsDesc.length - 1) + ')';
 
           var template = '<div class="route"><div class="buttons">' +
-            '<a href="#stats" class="button button-stats selected">Stats</a>' +
-            '<a href="#distribution" class="button button-distribution">Distribution</a>' +
-            '<a href="#request" class="button button-request">Request details</a>' +
-            '<a href="#response" class="button button-response">Response details</a>' +
+            '<a href="#stats" class="button button-stats selected">Respostas</a>' +
+            '<a href="#distribution" class="button button-distribution">distribuição</a>' +
+            '<a href="#request" class="button button-request">Detalhes da requisição</a>' +
+            '<a href="#response" class="button button-response">Detalhes da resposta</a>' +
             '</div><div class="stats panel"><div class="chart" id="chart' + i + '"></div>' +
-            '<div class="stats-details"><ul><li>' + routeData.stats.sample.length + ' run' +
-            (routeData.stats.sample.length > 1 ? 's' : '') + ' sampled with concurrency: ' +
+            '<div class="stats-details"><ul><li>' + routeData.stats.sample.length +
+            ' amostras com concorrência equivalente a: ' +
             routeData.options.concurrencyLevel + '</li>';
 
           if(routeData.options.expectedStatusCode)
-            template += '<li>Expected status code: ' + routeData.options.expectedStatusCode + '</li>';
+            template += '<li>Código de resposta esperado: ' + routeData.options.expectedStatusCode + '</li>';
 
           if(routeData.options.maxMean)
-            template += '<li>Expected max mean: ' + routeData.options.maxMean + '</li>';
+            template += '<li>Média máxima esperada: ' + routeData.options.maxMean + '</li>';
 
           if(routeData.options.maxSingleMean)
-            template += '<li>(*) Expected max mean across all concurrent requests: ' + routeData.options.maxSingleMean + '</li>';
+            template += '<li>(*) Média máxima esperada em todas as solicitações simultâneas: ' + routeData.options.maxSingleMean + '</li>';
 
           template += '</ul><ul><li>Iniciado: ' + formatDate(routeData.options.start) + '</li>' +
-            '<li>Finalizado: ' + formatDate(routeData.options.end) + ' (' + duration + ' seconds)</li>' +
+            '<li>Finalizado: ' + formatDate(routeData.options.end) + ' (' + duration + ' segundos)</li>' +
             '<li>' + fixNumber(routeData.hz, 2) + ' operações/segundo \xb1 ' + fixNumber(routeData.stats.rme, 2) + '%</li>' +
 
             '<li class="' + (!errorsCount ? 'green' : 'red') + '">' + errorsCount + ' erro' +
@@ -226,23 +226,27 @@
 
           template += '<li>Desvio padrão da amostra: ' + fixNumber(routeData.stats.deviation, 6) + '</li>' +
             '<li>Margem de erro: ' + fixNumber(routeData.stats.moe, 6) + '</li>' +
-            '<li>Margen de erro padrão da média: ' + fixNumber(routeData.stats.sem, 6) + '</li>' +
+            '<li>Margem de erro padrão da média: ' + fixNumber(routeData.stats.sem, 6) + '</li>' +
             '<li>Variância da amostra: ' + fixNumber(routeData.stats.variance, 6) + '</li>' +
             '</ul><ul><li>75% executados em: ' + fixNumber(routeData.stats.p75, 6) + '</li>' +
             '<li>95% executados em: ' + fixNumber(routeData.stats.p95, 6) + '</li>' +
             '<li>99% executados em: ' + fixNumber(routeData.stats.p99, 6) + '</li>' +
             '<li>99.9% executados em: ' + fixNumber(routeData.stats.p999, 6) + '</li>' +
             '</ul></div></div><div class="distribution panel"><div class="distchart" id="distchart' + i + '">' +
-            '</div></div><div class="request panel hide">Request: ' + routeData.options.method.toUpperCase() +
+            '</div></div><div class="request panel hide">Requisição: ' + routeData.options.method.toUpperCase() +
             ' <a href="' + routeData.href + '" target="_blank">' +
-            routeData.href + '</a><br />Concurrency level: ' + routeData.options.concurrencyLevel + '<br />';
+            routeData.href + '</a><br />Concorrência: ' + routeData.options.concurrencyLevel + '<br />';
 
           if(routeData.options.delay)
-            template += 'Delay between bench cycles: ' + routeData.options.delay + '<br />';
+            template += 'Atraso entre os ciclos de disparo: ' + routeData.options.delay + '<br />';
 
-          var requestHeaders = 'none',
-              requestData = 'none',
-              requestQuery = 'none';
+          var requestRoute = 'padrão',
+              requestHeaders = 'nenhum',
+              requestData = 'nenhum',
+              requestQuery = 'nenhuma';
+
+          if(!!routeData.request.route)
+            requestRoute = '<br /><pre><code>' + JSON.stringify(routeData.request.route, undefined, 2) + '</pre></code>';
 
           if(!!routeData.request.headers)
             requestHeaders = '<br /><pre><code>' + JSON.stringify(routeData.request.headers, undefined, 2) + '</pre></code>';
@@ -253,7 +257,7 @@
           if(!!routeData.request.query)
             requestQuery = '<br /><pre><code>' + JSON.stringify(routeData.request.query, undefined, 2) + '</pre></code>';
 
-          template += '<br />Headers sent: ' + requestHeaders + '<br />Data sent: ' + requestData + '<br />Query sent: ' + requestQuery + '<br /></div><div class="response panel hide">Data here refers to the first sampled response.<br /><br />';
+          template += '<br />Rota utilizada: ' + requestRoute + '<br />Headers enviados: ' + requestHeaders + '<br />Dados enviado: ' + requestData + '<br />Query enviada: ' + requestQuery + '<br /></div><div class="response panel hide">Os dados aqui se referem à primeira amostra de resposta.<br /><br />';
 
           var responseHeader = JSON.stringify(routeData.response.header, undefined, 2),
               responseBody = '';
@@ -264,9 +268,9 @@
             responseBody = decodeHtml(routeData.response.body);
           }
 
-          template += 'Response status: ' + routeData.response.statusCode + '<br />Response headers:<br />' +
+          template += 'Código de resposta: ' + routeData.response.statusCode + '<br />Headers de resposta:<br />' +
             '<pre><code>' + responseHeader + '</code></pre>' +
-            '<br />Response body:<br /><pre><code>' + responseBody + '</code></pre><br /></div></div>';
+            '<br />Body da resposta:<br /><pre><code>' + responseBody + '</code></pre><br /></div></div>';
 
           return template;
         }
@@ -347,22 +351,22 @@
             };
 
             var lines = [samples],
-                series = [getSeriesOptions('Samples', '#6699FF')];
+                series = [getSeriesOptions('Amostras', '#6699FF')];
 
             if(maxMean){
               lines.push(maxMeanArray);
-              series.push(getSeriesOptions('Max Mean', '#F90'));
+              series.push(getSeriesOptions('Média máxima', '#F90'));
             }
 
             lines.push(meanArray);
-            series.push(getSeriesOptions('Mean', '#66FF00'));
+            series.push(getSeriesOptions('Média', '#66FF00'));
 
             if(maxSingleMean){
               lines.push(maxSingleMeanArray);
-              series.push(getSeriesOptions('Max Single Mean (*)', '#EBFF00'));
+              series.push(getSeriesOptions('Média única máxima (*)', '#EBFF00'));
 
               lines.push(singleMeanArray);
-              series.push(getSeriesOptions('Single mean', '#FC6333'));
+              series.push(getSeriesOptions('Média única', '#FC6333'));
             }
 
             if(areThereSomeErrors > 0){
@@ -458,7 +462,7 @@
                 series = [{
                   showMarker: false,
                   pointLabels: { show: true },
-                  label: 'Samples',
+                  label: 'Amostras',
                   color: '#6699FF',
                   rendererOptions: {
                     smooth: true
@@ -497,13 +501,13 @@
               },
               axes: {
                 xaxis: {
-                  label: 'Response time (seconds)',
+                  label: 'Tempo de resposta (segundos)',
                   tickOptions: {
                     formatString:'%.3f'
                   }
                 },
                 yaxis: {
-                  label: 'Percent of responses',
+                  label: 'Percentual de respostas',
                   tickOptions: {
                     formatString: '%.1f%'
                   }
