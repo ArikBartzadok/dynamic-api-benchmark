@@ -1,6 +1,6 @@
 {
   "name": "dynamic-api-benchmark",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "Pacote para testes dinâmicos de APIs",
   "author": "Diogo Ferreira dos Santos",
   "license": "MIT",
